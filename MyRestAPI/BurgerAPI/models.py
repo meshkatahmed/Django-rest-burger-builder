@@ -39,3 +39,29 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+class Ingredient(models.Model):
+    salad = models.IntegerField(default=0)
+    cheese = models.IntegerField(default=0)
+    meat = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.salad) + str(self.cheese) + str(self.meat)
+
+class CustomerDetail(models.Model):
+    deliveryAddress = models.TextField(blank=True)
+    phone = models.CharField(max_length=255,blank=True)
+    paymentType = models.CharField(max_length=20,blank=True)
+
+    def __str__(self):
+        return self.deliveryAddress
+    
+class Order(models.Model):
+    user = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    ingredients = models.OneToOneField(Ingredient,null=True,on_delete=models.CASCADE)
+    customer = models.OneToOneField(CustomerDetail,null=True,on_delete=models.CASCADE)
+    price = models.CharField(max_length=20,blank=False)
+    orderTime = models.CharField(max_length=100,blank=False)
+
+    def __str__(self):
+        return str(self.user) + ' Order'
